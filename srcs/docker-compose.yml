@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  mariadb_service:
+    image: mariadb:10.0
+    container_name: db
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MYSQL_DATABASE=wordpress
+    volumes:
+      - dbdata:/var/lib/mariadb
+    command: '--default-authentication-plugin=mariadb_native_password'
+    networks:
+      - app-network
