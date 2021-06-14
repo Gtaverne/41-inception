@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+    mysql_serv:
+        container_name: mariadb
+        build: ./requirements/mariadb/.
+        restart: always
+        networks: 
+            - inception
+        volumes: 
+            - dbdata:/var/lib/mysql/
+    wordpress_serv:
+        container_name: wordpress
+        build: ./requirements/wordpress/.
+        restart: always
+        networks:
+            - inception
+        volumes:
+            - wpdata:/www/
+    nginx_serv:
+        container_name: nginx
+        build: ./requirements/nginx/.
+        restart: always
+        networks:
+            - inception
+        ports:
+            #penser a supp 80
+            - 80:80
+            - 443:443
+        volumes:
+            - wpdata:/www/
+
+volumes:
+    wpdata:
+        driver: local
+        driver_opts: 
+            type: 'none'
+            o: 'bind'
+            device: '/home/user42/data/wordpress'
+    dbdata:
+        driver: local
+        driver_opts: 
+            type: 'none'
+            o: 'bind'
+            device: '/home/user42/data/mariadb'
+
+networks: 
+    inception:

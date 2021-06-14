@@ -1,0 +1,32 @@
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+	server_name rush42;
+	#301 permet de renvoyer vers le port 443, afin de bloquer l'acces en http
+	return 301 https://$host$request_uri;
+}
+
+server {
+	# SSL configuration
+	listen 443 ssl;
+	listen [::]:443 ssl;
+
+	server_name inception_front;
+	ssl_certificate /etc/nginx/ssl/localhost.pem;
+	ssl_certificate_key /etc/nginx/ssl/localhost.key;
+
+	root /var/www/inception_front;
+
+	index index.html index.htm index.nginx-debian.html index.php;
+
+	location / {
+		#Recherche des fichiers
+		try_files $uri $uri/ =404;
+	}
+
+	location ~ \.php$ {
+		include snippets/fastcgi-php.conf;
+		fastcgi_pass unix:/run/php/php7.3-fpm.sock;
+	}
+}
+
