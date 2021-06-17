@@ -1,0 +1,57 @@
+version: '3'
+
+services:
+    mariadb:
+        container_name: mariadb
+        build: ./requirements/mariadb/.
+        image: mariadb:latest
+        volumes: 
+            - wp_data:/var/lib/mysql/
+        restart: always
+        networks:
+            - wp
+        env_file: .env
+    
+    wordpress:
+        depends_on: 
+            - mariadb
+        container_name: wordpress
+        build: ./requirements/wordpress/.
+        image: wordpress:latest
+        volumes: 
+            - wp_data:/var/www/
+        restart: always
+
+        networks: 
+            - wp
+        env_file: .env
+
+    nginx_serv:
+        container_name: nginx
+        build: ./requirements/nginx/.
+        restart: always
+        networks:
+            - wp
+        ports:
+            - 443:443
+        volumes:
+            - wp_data:/var/www/
+
+#Ces containers sont des bonus
+    
+
+networks: 
+    wp:
+volumes:
+    wp_data:
+        driver: local
+        driver_opts: 
+            type: 'none'
+            o: 'bind'
+            device: '/home/gtaverne/data/wordpress'
+    db_data:
+        driver: local
+        driver_opts: 
+            type: 'none'
+            o: 'bind'
+            device: '/home/gtaverne/data/mariadb'
