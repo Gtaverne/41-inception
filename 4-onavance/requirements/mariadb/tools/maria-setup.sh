@@ -1,15 +1,9 @@
-#construction de la DB wordpress, elle doit etre accessible sans mdp avec le compte root
+#!/bin/bash
 service mysql start
-sleep 5
-#mysql -u root SHOW DATABASES
-
-echo "BIIIIIIIIITE MEEEEEE\n\n\n\n"
-echo "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci" | mysql -u root
-echo "CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY 'MYSQL_PASSWORD'" | mysql -u root
-echo "GRANT ALL ON $MYSQL_DATABASE .* TO 'MYSQL_USER'@'%'" | mysql -u root
-
-echo "MARIAAAAAAAAAAA"
-
+sleep 10
+echo "CREATE DATABASE IF NOT EXISTS wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;" | mysql -u root --skip-password
+echo "GRANT ALL PRIVILEGES ON wordpress.* TO 'root'@'localhost' WITH GRANT OPTION;" | mysql -u root --skip-password
+echo "UPDATE mysql.user set plugin='mysql_native_password' WHERE user='root';" | mysql -u root --skip-password
+echo "FLUSH PRIVILEGES;" | mysql -u root --skip-password
 service mysql stop
-
-exec /usr/sbin/mysqld -u root
+./usr/bin/mysqld_safe

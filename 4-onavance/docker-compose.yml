@@ -6,7 +6,7 @@ services:
         build: ./requirements/mariadb/.
         image: mariadb:latest
         volumes: 
-            - wp_data:/var/lib/mysql/
+            - db_data:/var/lib/mysql/
         restart: always
         networks:
             - wp
@@ -47,9 +47,8 @@ services:
             - wp
         depends_on: 
             - mariadb
-        env_file: .env
-        environment: 
-            PMA_HOST: db
+        environment:
+            PMA_HOST: gtaverne
             MYSQL_ROOT_PASSWORD: password
         ports:
             - '8080:80'

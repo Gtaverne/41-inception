@@ -4,16 +4,19 @@ RUN apt-get update
 RUN apt-get install -y \
 	mariadb-server \
 	mariadb-client \
+	bash \
 	gettext-base \
 	dumb-init
 
+
+COPY ./conf/my.cnf /tmp
+COPY ./tools/my_maria-setup.sh /tmp
+
+RUN chmod 555 /tmp/my_maria-setup.sh
+RUN mv ./tmp/my.cnf /etc/mysql/my.cnf && chmod 0755 /etc/mysql/my.cnf
+
+#RUN /usr/bin/mysql_secure_installation
+
 EXPOSE 3306
-COPY ./conf/my.cnf /etc/mysql/my.cnf
-COPY ./tools/maria-setup.sh /tmp
 
-RUN chmod 777 /tmp/maria-setup.sh
-RUN chmod 777 /etc/mysql/my.cnf
-
-ENTRYPOINT [ "/usr/bin/dumb-init" ]
-
-#CMD ["/tmp/maria-setup.sh"]
+ENTRYPOINT ["./tmp/my_maria-setup.sh"]
