@@ -4,7 +4,7 @@ services:
     mariadb:
         container_name: mariadb
         build: ./requirements/mariadb/.
-        image: mariadb:latest
+        image: mariadb
         volumes: 
             - db_data:/var/lib/mysql/
         restart: always
@@ -17,7 +17,7 @@ services:
             - mariadb
         container_name: wordpress
         build: ./requirements/wordpress/.
-        image: wordpress:latest
+        image: wordpress
         volumes: 
             - wp_data:/var/www/
         restart: always
@@ -25,12 +25,12 @@ services:
             - wp
         env_file: .env
 
-    nginx_serv:
+    nginx:
         depends_on: 
             - mariadb
             - wordpress
         container_name: nginx
-        image: nginx:latest
+        image: nginx
         build: ./requirements/nginx/.
         restart: always
         networks:
@@ -44,6 +44,7 @@ services:
     adminer:
         container_name: adminer
         image: adminer
+        build: ./requirements/bonus/adminer/.
         restart: always
         networks: 
             - wp
@@ -53,6 +54,20 @@ services:
             MYSQL_ROOT_PASSWORD: password
         ports:
             - '8080:8080'
+    
+    jupyter:
+        container_name: jupyter
+        image: jupyter
+        build: ./requirements/bonus/jupyter/.
+        restart: always
+        networks: 
+            - wp
+        depends_on: 
+            - nginx
+        ports:
+             - '8888:8888'
+        volumes: 
+            - jupy_vol:/notebooks/
 
 networks: 
     wp:
@@ -69,3 +84,9 @@ volumes:
             type: 'none'
             o: 'bind'
             device: '/home/gtaverne/data/db'
+    jupy_vol:
+        driver: local
+        driver_opts:
+            type: 'none'
+            o: 'bind'
+            device: '/home/gtaverne/data/jupyter'

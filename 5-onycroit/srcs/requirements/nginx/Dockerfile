@@ -12,7 +12,7 @@ RUN apt-get update -y && apt-get install -y \
 COPY conf/config_nginx /etc/nginx/nginx.conf
 RUN mkdir -p /etc/nginx/ssl
 
-#Voir le detail du chemin ou ecrire la clef
+#Generation d'une clef
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 	-keyout /etc/nginx/ssl/gtaverne.key -out /etc/nginx/ssl/gtaverne.crt \
 	-subj "/C=FR/ST=Paris/L=Paris/O=42Paris/OU=gtaverne.42.fr/CN=gtaverne.42.fr"
