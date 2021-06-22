@@ -14,12 +14,12 @@ RUN echo "We are here" ; pwd
 # RUN virtualenv envpython
 # RUN source envpython/bin/activate
 
-
 RUN pip3 install jupyter
-# RUN jupyter notebook
 
 EXPOSE 8888
 
-#ENTRYPOINT ["dumb-init", "--"]
+COPY ./tools/jupyterstart.sh /tmp/jupyterstart.sh
 
-ENTRYPOINT ["jupyter", "notebook", "--ip 0.0.0.0", "--no-browser", "--allow-root"]
+ENTRYPOINT [ "/usr/bin/dumb-init" ]
+
+CMD ["bash", "/tmp/jupyterstart.sh"]
