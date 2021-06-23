@@ -52,8 +52,6 @@ services:
             - mariadb
         environment:
             MYSQL_ROOT_PASSWORD: password
-        ports:
-            - '8080:8080'
     
     jupyter:
         container_name: jupyter
@@ -62,8 +60,6 @@ services:
         restart: always
         networks: 
             - wp
-        depends_on: 
-            - nginx
         ports:
              - '8888:8888'
         volumes: 

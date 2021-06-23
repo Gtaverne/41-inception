@@ -3,22 +3,18 @@ FROM debian:buster
 RUN apt-get update && apt-get install -y\
 	python3-pip \
 	python3-dev \
+	virtualenv \
 	dumb-init
 
 RUN pip3 install --upgrade pip
-RUN pip3 install virtualenv
 
-RUN mkdir ~/nb
-RUN cd ~/nb
-RUN echo "We are here" ; pwd
-# RUN virtualenv envpython
-# RUN source envpython/bin/activate
-
-RUN pip3 install jupyter
+RUN pip3 install jupyter==5.7.5
+#RUN pip3 install notebook==5.7.5
 
 EXPOSE 8888
 
 COPY ./tools/jupyterstart.sh /tmp/jupyterstart.sh
+COPY ./tools/jupyter_notebook_config.py /tmp/jupyter_notebook_config.py
 
 ENTRYPOINT [ "/usr/bin/dumb-init" ]
 
