@@ -60,18 +60,10 @@ services:
         restart: always
         networks: 
             - wp
+        ports:
+             - '8888:8888'
         volumes: 
             - jupy_vol:/notebooks/
-
-    ftp:
-        container_name: ftp
-        image: ftp
-        build: ./requirements/bonus/ftp/.
-        restart: always
-        network:
-            - wp
-        volumes:
-            - wp_data:/wordpress
 
 networks: 
     wp:
