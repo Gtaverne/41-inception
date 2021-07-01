@@ -68,7 +68,7 @@ services:
         image: ftp
         build: ./requirements/bonus/ftp/.
         restart: always
-        network:
+        networks:
             - wp
         volumes:
             - wp_data:/wordpress
