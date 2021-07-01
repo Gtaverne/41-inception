@@ -1,11 +1,14 @@
 FROM alpine:3.14
 
-RUN apk --no-cache add vsftpd
+RUN apk --no-cache add vsftpd \
+bash \
+dumb-init
 
-COPY start_vsftpd.sh /bin/start_vsftpd.sh
-COPY vsftpd.conf /etc/vsftpd/vsftpd.conf
+COPY conf/start_vsftpd.sh /tmp/start_vsftpd.sh
+COPY conf/vsftpd.conf /etc/vsftpd/vsftpd.conf
+
+RUN chmod -R 755 /tmp/
 
 EXPOSE 21 21000-21010
-VOLUME /ftp/ftp
 
-ENTRYPOINT ["/bin/start_vsftpd.sh"]
+ENTRYPOINT ["/tmp/start_vsftpd.sh"]

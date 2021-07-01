@@ -68,10 +68,15 @@ services:
         image: ftp
         build: ./requirements/bonus/ftp/.
         restart: always
+        ports:
+            - 21000-21010:21000-21010
+            - 21:21
+            - 20:20
         networks:
             - wp
         volumes:
-            - wp_data:/wordpress
+            - wp_data:/ftp/
+        env_file: ./requirements/bonus/ftp/conf/.envftp
 
 networks: 
     wp:
