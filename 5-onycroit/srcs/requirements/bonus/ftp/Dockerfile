@@ -9,6 +9,6 @@ COPY conf/vsftpd.conf /etc/vsftpd/vsftpd.conf
 
 RUN chmod -R 755 /tmp/
 
-EXPOSE 21 21000-21010
+EXPOSE 21 20 21000-21010
 
 ENTRYPOINT ["/tmp/start_vsftpd.sh"]

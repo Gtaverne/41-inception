@@ -1,2 +1,3 @@
-USERS=ftp|passwordftp
+FTP_USERS=ftp
+FTP_PASS=passwordftp
 ADDRESS=gtaverne.42.fr

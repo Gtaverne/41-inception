@@ -1,6 +1,6 @@
 MY_DOCKER_COMPOSE=./srcs/docker-compose.yml
 
-all		:	up
+all		:	help
 
 start	:
 	@ docker-compose -f ${MY_DOCKER_COMPOSE} start
@@ -24,6 +24,20 @@ fclean	:
 	@ docker-compose -f ${MY_DOCKER_COMPOSE} down -v
 	@ docker system prune --all
 
+help	:
+	@ echo "List of possible commands"
+	@ echo "start:		starts the docker compose"
+	@ echo "show:		docker compose up + build"
+	@ echo "up:		docker compose up -d --build"
+	@ echo "stop:		docker composestop"
+	@ echo "down:		docker compose down"
+	@ echo "clean:		docker compose down -v, unmounts the volumes"
+	@ echo "fclean: 	clean + removes ALL images and containers"
+	@ echo "correclean:	launches all the cleaning instructions from the correction"
+	@ echo "ps:		docker compose ps, displays all launched services"
+	@ echo "webpage:	launches the site in firefox"
+
+
 correclean :
 	@ echo "On arrete tous les conteneurs\nOn supprime toutes les image"
 	@ echo "On supprime tous les volumes\nOn supprime tous les reseaux"
@@ -37,6 +51,6 @@ ps		:
 	@ docker-compose -f ${MY_DOCKER_COMPOSE} ps
 
 webpage	:
-	firefox 'https://www.gtaverne.42.fr'
-
-.PHONY	:	all start ps show up down clean fclean webpage
+	nohup firefox 'https://www.gtaverne.42.fr' >>hell.txt &
+	
+.PHONY	:	all start ps show up down clean fclean webpage help
