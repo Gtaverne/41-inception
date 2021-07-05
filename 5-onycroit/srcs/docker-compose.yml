@@ -77,7 +77,7 @@ services:
         networks:
             - wp
         volumes:
-            - wp_data:/ftp/
+            - wp_data:/home/ftp
         env_file: ./requirements/bonus/ftp/conf/.envftp
 
 networks: 
