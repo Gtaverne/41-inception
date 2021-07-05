@@ -62,6 +62,8 @@ services:
             - wp
         volumes: 
             - jupy_vol:/notebooks/
+        ports:
+            - 8888:8888
 
     ftp:
         container_name: ftp
