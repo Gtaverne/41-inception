@@ -23,6 +23,7 @@ fi
 
 
 chmod -R 755 /var/www/
+chmod -R 777 /var/www/wordpress/wp-content
 mkdir -p /run/php/
 
 exec /usr/sbin/php-fpm7.3

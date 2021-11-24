@@ -20,6 +20,6 @@ COPY ./tools/setup-wp.sh setup-wp.sh
 
 ENTRYPOINT [ "/usr/bin/dumb-init" ]
 
-EXPOSE 9000 6379
+EXPOSE 9000
 
 CMD ["bash", "setup-wp.sh"]
