@@ -2,4 +2,4 @@
 
 echo "Redis container has been created"
 
-redis-cli
+redis-server
