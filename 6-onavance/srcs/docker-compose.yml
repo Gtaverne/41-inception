@@ -53,44 +53,29 @@ services:
         environment:
             MYSQL_ROOT_PASSWORD: password
     
-    # ftp:
-    #     container_name: ftp
-    #     image: ftp
-    #     build: ./requirements/bonus/ftp/.
-    #     restart: always
+    ftp:
+        container_name: ftp
+        image: ftp
+        depends_on: 
+            - wordpress
+        build: ./requirements/bonus/ftp/.
+        ports:
+            - 0.0.0.0:20:20
+            - 0.0.0.0:21:21
+        volumes:
+            - /home/gtaverne/data/static:/home/ftp
+        env_file:
+          - ./requirements/bonus/ftp/conf/.envftp
+
+    # redis:
+    #     container_name: redis
+    #     image: redis
+    #     build: ./requirements/bonus/redis/.
     #     ports:
-    #         - 21000-21010:21000-21010
-    #         - 21:21
-    #         - 20:20
+    #         - 6379:6379
+    #     # restart: always
     #     networks:
     #         - wp
-    #     volumes:
-    #         - wp_data:/home/ftp
-    #     env_file: ./requirements/bonus/ftp/conf/.envftp
-    ftp:
-        image: avenus/vsftpd-alpine
-        ports:
-            - "35000:21"
-            - "21100-21110:21100-21110"
-        volumes:
-            - wp_data:/home/user/
-            - /home/ftp/logs/:/var/log/
-        environment:
-            - FTP_USER=user
-            - FTP_PASS=my-password
-            - PASV_ADDRESS=5.6.7.8
-            - PASV_MIN=21100
-            - PASV_MAX=21110
-
-    redis:
-        container_name: redis
-        image: redis
-        build: ./requirements/bonus/redis/.
-        ports:
-            - 6379:6379
-        # restart: always
-        networks:
-            - wp
 
 networks: 
     wp:
