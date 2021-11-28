@@ -1,0 +1,3 @@
+FTP_USER=usernerd
+FTP_PASS=blabla
+PASV_ADDRESS=127.0.0.1

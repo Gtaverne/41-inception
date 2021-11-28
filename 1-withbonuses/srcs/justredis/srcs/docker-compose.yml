@@ -11,10 +11,6 @@ services:
         networks:
             - wp
         env_file: .env
-        labels:
-            - "traefik.frontend.rule=Host:pma.docker.localhost"
-            - "traefik.enable=true"
-
     
     wordpress:
         depends_on: 
@@ -28,9 +24,6 @@ services:
         networks: 
             - wp
         env_file: .env
-        labels:
-            - "traefik.frontend.rule=Host:pma.docker.localhost"
-            - "traefik.enable=true"
 
     nginx:
         container_name: nginx
@@ -46,10 +39,6 @@ services:
             - 443:443
         volumes:
             - wp_data:/var/www/
-        labels:
-            - "traefik.frontend.rule=Host:pma.docker.localhost"
-            - "traefik.enable=true"
-
 
 #Ces containers sont des bonus
     adminer:
@@ -63,10 +52,6 @@ services:
             - mariadb
         environment:
             MYSQL_ROOT_PASSWORD: password
-        labels:
-            - "traefik.frontend.rule=Host:pma.docker.localhost"
-            - "traefik.enable=true"
-
     
     ftp:
         container_name: ftp
@@ -80,11 +65,7 @@ services:
         volumes:
             - wp_data:/home/ftp
         env_file:
-            - ./requirements/bonus/ftp/conf/.envftp
-        labels:
-            - "traefik.frontend.rule=Host:pma.docker.localhost"
-            - "traefik.enable=true"
-
+          - ./requirements/bonus/ftp/conf/.envftp
 
     redis:
         container_name: redis
@@ -93,29 +74,6 @@ services:
         networks:
             - wp
         restart: always
-        labels:
-            - "traefik.frontend.rule=Host:pma.docker.localhost"
-            - "traefik.enable=true"
-
-    traefik:
-        image: traefik
-        container_name: traefik
-        build: ./requirements/bonus/traefik/.
-        command:
-            - "--api.insecure=true"
-            - "--providers.docker=true"
-            - "--providers.docker.exposedbydefault=false"
-            - "--entrypoints.web.address=:80"
-        ports:
-            - "8080:8080"
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
-        networks:
-            - wp
-        labels:
-            - "traefik.frontend.rule=Host:traefik.docker.localhost"
-            - "traefik.port=8080"
-
 
 networks: 
     wp:
