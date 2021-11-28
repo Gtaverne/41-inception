@@ -7,7 +7,8 @@ define('WP_REDIS_HOST', 'redis');
 define('WP_REDIS_PORT', '6379');
 define('WP_REDIS_PASSWORD', 'REDIS_PASSWORD');
 define('WP_CACHE_KEY_SALT', 'domain.tld');
-
+define( 'WP_REDIS_READ_TIMEOUT', 1 );
+define( 'WP_REDIS_DATABASE', 0 );
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */

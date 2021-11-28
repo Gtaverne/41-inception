@@ -26,4 +26,6 @@ chmod -R 755 /var/www/
 chmod -R 777 /var/www/wordpress/wp-content
 mkdir -p /run/php/
 
+wp redis enable --allow-root --path=/var/www/wordpress
+
 exec /usr/sbin/php-fpm7.3
