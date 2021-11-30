@@ -1,0 +1,135 @@
+version: '3'
+
+services:
+    mariadb:
+        container_name: mariadb
+        build: ./requirements/mariadb/.
+        image: mariadb
+        volumes: 
+            - db_data:/var/lib/mysql/
+        restart: always
+        networks:
+            - wp
+        env_file: .env
+        labels:
+            - "traefik.frontend.rule=Host:pma.docker.localhost"
+            - "traefik.enable=true"
+
+    
+    wordpress:
+        depends_on: 
+            - mariadb
+        container_name: wordpress
+        build: ./requirements/wordpress/.
+        image: wordpress
+        volumes: 
+            - wp_data:/var/www/
+        restart: always
+        networks: 
+            - wp
+        env_file: .env
+        labels:
+            - "traefik.frontend.rule=Host:pma.docker.localhost"
+            - "traefik.enable=true"
+
+    nginx:
+        container_name: nginx
+        image: nginx
+        build: ./requirements/nginx/.
+        depends_on: 
+            - mariadb
+            - wordpress
+        restart: always
+        networks:
+            - wp
+        ports:
+            - 443:443
+        volumes:
+            - wp_data:/var/www/
+        labels:
+            - "traefik.frontend.rule=Host:pma.docker.localhost"
+            - "traefik.enable=true"
+
+
+#Ces containers sont des bonus
+    adminer:
+        container_name: adminer
+        image: adminer
+        build: ./requirements/bonus/adminer/.
+        restart: always
+        networks: 
+            - wp
+        depends_on: 
+            - mariadb
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+        labels:
+            - "traefik.frontend.rule=Host:pma.docker.localhost"
+            - "traefik.enable=true"
+
+    
+    ftp:
+        container_name: ftp
+        image: ftp
+        depends_on: 
+            - wordpress
+        build: ./requirements/bonus/ftp/.
+        ports:
+            - 0.0.0.0:20:20
+            - 0.0.0.0:21:21
+        volumes:
+            - wp_data:/home/ftp
+        env_file:
+            - ./requirements/bonus/ftp/conf/.envftp
+        labels:
+            - "traefik.frontend.rule=Host:pma.docker.localhost"
+            - "traefik.enable=true"
+
+
+    redis:
+        container_name: redis
+        image: redis
+        build: ./requirements/bonus/redis/.
+        networks:
+            - wp
+        restart: always
+        labels:
+            - "traefik.frontend.rule=Host:pma.docker.localhost"
+            - "traefik.enable=true"
+
+    traefik:
+        image: traefik
+        container_name: traefik
+        build: ./requirements/bonus/traefik/.
+        command:
+            - "--api.insecure=true"
+            - "--providers.docker=true"
+            - "--providers.docker.exposedbydefault=false"
+            - "--entrypoints.web.address=:80"
+        ports:
+            - "8080:8080"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+            - wp
+        labels:
+            - "traefik.frontend.rule=Host:traefik.docker.localhost"
+            - "traefik.port=8080"
+
+
+networks: 
+    wp:
+
+volumes:
+    wp_data:
+        driver: local
+        driver_opts: 
+            type: 'none'
+            o: 'bind'
+            device: '/home/gtaverne/data/static'
+    db_data:
+        driver: local
+        driver_opts: 
+            type: 'none'
+            o: 'bind'
+            device: '/home/gtaverne/data/db'

@@ -1,0 +1,50 @@
+events {
+	worker_connections 1024;
+}
+
+http {
+		upstream wordpress {
+			server wordpress:9000;
+		}
+
+		upstream adminer {
+			server adminer:8080;
+		}
+
+
+		#upstream sitegta {
+		#	server sitegta:7000;
+		#}
+
+		server {
+			listen 443 ssl;
+			listen [::]:443 ssl;
+			server_name gtaverne.42.fr;
+			include  /etc/nginx/mime.types;
+
+			root /var/www/wordpress;
+			index index.nginx-debian.html index.php index.html index.htm;
+			ssl_protocols TLSv1.2;
+			ssl_certificate /etc/nginx/ssl/gtaverne.crt;
+			ssl_certificate_key /etc/nginx/ssl/gtaverne.key;
+
+		location / {
+			try_files $uri $uri/ =404;
+		}
+
+		location /adminer/ {
+			proxy_set_header X-Forwarded-Prefix "/adminer";
+			proxy_pass http://adminer/;
+		}
+
+
+		location ~ \.php$ {
+			fastcgi_split_path_info ^(.+\.php)(/.+)$;
+			fastcgi_pass wordpress;
+			fastcgi_index index.php;
+			include fastcgi_params;
+			fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+			fastcgi_param SCRIPT_NAME $fastcgi_script_name;
+        }
+    }
+}
