@@ -3,21 +3,21 @@ version: '3'
 services:
     mariadb:
         container_name: mariadb
-        env_file: .env
+        # env_file: .env
         build: 
-            args:
-                MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-                MYSQL_DATABASE: ${MYSQL_DATABASE}
-                MYSQL_USER: ${MYSQL_USER}
-                MYSQL_PASSWORD: ${MYSQL_PASSWORD}
             context: ./requirements/mariadb/.
+            args:
+                - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+                - MYSQL_DATABASE=${MYSQL_DATABASE}
+                - MYSQL_USER=${MYSQL_USER}
+                - MYSQL_PASSWORD=${MYSQL_PASSWORD}
         image: mariadb
         volumes: 
             - db_data:/var/lib/mysql/
         restart: always
         networks:
             - wp
-    
+
     wordpress:
         depends_on: 
             - mariadb
@@ -62,3 +62,10 @@ volumes:
             type: 'none'
             o: 'bind'
             device: '/home/gtaverne/data/db'
+
+
+                #         args:
+                # MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+                # MYSQL_DATABASE: ${MYSQL_DATABASE}
+                # MYSQL_USER: ${MYSQL_USER}
+                # MYSQL_PASSWORD: ${MYSQL_PASSWORD}

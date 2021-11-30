@@ -6,7 +6,7 @@ start	:
 	@ docker-compose -f ${MY_DOCKER_COMPOSE} start
 
 show	:
-	@ docker-compose -f ${MY_DOCKER_COMPOSE} up --build 
+	@ docker-compose -f ${MY_DOCKER_COMPOSE} --env-file ./srcs/.env up --build
 
 up	:
 	@ docker-compose -f ${MY_DOCKER_COMPOSE} up  -d --build
