@@ -58,10 +58,3 @@ volumes:
             type: 'none'
             o: 'bind'
             device: '/home/gtaverne/data/db'
-
-
-                #         args:
-                # MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-                # MYSQL_DATABASE: ${MYSQL_DATABASE}
-                # MYSQL_USER: ${MYSQL_USER}
-                # MYSQL_PASSWORD: ${MYSQL_PASSWORD}
